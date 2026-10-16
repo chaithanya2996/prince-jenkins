@@ -1,0 +1,152 @@
+JENKINS
+====================
+
+In General--> Jenkins called as CI/CD tool but,
+
+Jenkins is only used for CI --> take code --> build --> test
+
+
+Continuous Integration = Continuous build + Continuous Test
+
+
+Developers continuously generate/write code (old + new)--> so we need to continuously build and test
+
+Building -> Compiling Source COde
+
+Laptop -> Java Code -> Java Compiler -> Byte Code (0 or 1) -> 
+            Resume Doc -> MS Word
+
+Another Server -> Java Code directly without software -> Execuatable Format + Software Dependencies
+
+100 Java Files -> Java Sfotware -> Compile -> Java File1, Java File2 -> Executable format -> Build Tools
+
+Java -> Maven, Gradle, ...
+Python -> Gradle, 
+.Net -> MS Build, VS Build
+NodeJS/React/Angular/Express --> NPM
+
+
+Maven does the same but it is manual, to automate use Jenkins
+
+Before CI, everything is manual process
+After CI, everything is automated
+
+
+
+What is CD ? Continuous Delivery / Deployment
+
+Continuous Delivery = Deployment Manually to Prod Env
+Continuous Deployment = Deployment Automatically to Prod Env
+
+Explain about Environments
+PRE-PROD
+--> Dev = Developers
+--> QA = Testers
+--> UAT = Client will use Apps and suggests
+
+PROD / Live
+--> PROD = Accessed by Users
+
+Continuous Delivery = Deploying application to Production manually
+Continuous Deployment = Deploying applications to Production automatically
+
+==========================================
+
+If I want to do CI / CD --> we use Pipelines
+
+PIPELINE
+
+Maven will do first few , compile , test and artifact but NOT DEPLOY
+Maven will do manual, but Jenkins will automate these steps
+
+=========================================
+
+JENKINS
+
+Its a free and open source tool (source code is available to use)
+Jenkins written in java
+its a platform independent (works on windows, Linux)
+It consists of Plugins
+We have community support
+It can automate entire SDLC
+It is owned by Sun micro system
+Previous we called Hudson and it was a paid version
+Later Oracle bought Hudson and made it free
+Later Hudson was renamed as Jenkins
+Inventor : Kohsuke Kawaguchi
+Port number : 8080
+Java: Java 11 / 17 / 21
+Default path : /var/lib/jenkins
+
+===========================
+Alternatives : GO CI, Circle CI, Tarvis, Semaphore, Buddy Build Master, Gitlab, Harness, argoCD
+
+CLOUD : AWS CodePipeline, Azure Pipeline
+
+==================================
+
+
+SETUP : Launch EC2 instance Amazon Linux 2023
+--------------------------------------------
+
+In SG, allow protocols, 8080, 80 http
+
+To setup Jenkins, we need to take code from git , build using maven , that's the reason we install below all
+
+Fork devopscript repostiory
+
+
+vi jenkins.sh
+paste the script
+
+sh jenkins.sh
+
+
+CONNECTION:
+public-ip-server:8080 (browser)
+cat /var/lib/jenkins/secrets/initialAdminPassword
+
+give this password in browser and install plugins
+give sample usernames and passwords --> start Jenkins
+
+For logs:
+
+journalctl -u jenkins
+
+
+
+
+========================================================
+Creating a sample job
+=======================================================
+
+Example 1: Firstjob - Execute shell
+--------
+
+CREATING A JOB:
+---------------
+New item -- > Name -- > Free Style -- > Ok
+Description --> THis is my first job
+Build Steps --> Execute Shell --> echo "Welcome to Jenkins" --> Save
+Build Now
+
+--> Now Modify Build --> echo "Welcome to Jenkins" > /tmp/first-job.txt
+
+Run the build
+
+see in Jenkins server --> cd /tmp/  [What ever we create in pipeline, all files will be stored in jenkins server]
+
+--> lets create a small bash script
+
+    vi     basic.sh
+    #!/bin/bash
+    echo "This is sample script under tmp"
+
+sh basic.sh
+
+Edit the job and modify the script . If you want to run any script which is there on server from pipeline
+
+echo "Welcome to Jenkins" > /tmp/first-job.txt
+bash /tmp/basic.sh
+
+Run the Build and see Output
