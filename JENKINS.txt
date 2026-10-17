@@ -150,3 +150,135 @@ echo "Welcome to Jenkins" > /tmp/first-job.txt
 bash /tmp/basic.sh
 
 Run the Build and see Output
+
+Build with Parameters
+------------------
+
+Edit the Job --> THis Project is Parameterized
+Example --> Select --> String Parameter
+Name = FirstName
+Default Value = Madhan
+
+One more
+
+Select --> String Parameter
+Name = LastName
+Default Value = Chaithanya
+
+
+Nows lets use these parameters in script
+
+echo "I am" $FirstName $LastName
+echo "Welcome to Jenkins"
+echo "Welcome to Jenkins" > /tmp/first-job.txt
+bash /tmp/basic.sh
+
+Run the Build
+
+By default, you get Madhan Chaithanya, but you can override it with other string/name
+
+see the output
+
+
+Another Example:  Lets add choice parameter: Edit the Build Job
+-----------------
+--> This Project is Parameterized --> Add Parameter --> choice Parameter
+Name: Gender
+Choices:
+MALE
+FEMALE
+OTHER
+
+Edit the Script and add $Gender
+
+echo $FirstName $LastName $Gender
+echo "Welcome to Jenkins"
+echo "Welcome to Jenkins" > /tmp/first-job.txt
+bash /tmp/basic.sh
+
+Another Example: Lets add choice Parameter : Edit the Build Job
+-----------------
+--> This Project is Parameterized --> Add Parameter --> choice Parameter
+Name: ENV
+Choices:
+Production
+Development
+
+echo "I am" $FirstName $LastName $Gender
+echo "Welcome to Jenkins Pipeline by Madhan" > /tmp/first-job.txt
+bash /tmp/basic.sh
+echo "Deploying to environment: $ENV"
+if [ "$ENV" = "Production" ]; then
+  echo "Warning: You are deploying to Production!"
+else
+   echo "Deploying to $ENV Environment."
+fi
+
+
+
+Scheduling the job
+----------------
+
+If you want to run the job based on schedule, we can use Build Periodically option
+
+Create a new free style job --> Name = cron-job
+
+Description --> THis is scheduled job
+Build Periodically --> *****  -- every min  */5 * * * *  -- Every 5 mins
+
+search in google -- cronjob generator -- https://crontab.cronhub.io/
+
+Build Steps --> Execute Shell --> echo "Welcome to Jenkins" --> Save
+
+Build Now
+
+This job will build every min
+
+
+
+CREATING A JOB : Integration with GitHub
+----------------------------------------
+
+Note: To integrate any tool, we need to install plugins first.
+
+Check if git plugins are available, if available, no need to install. If not, install plugins
+
+Example 1 : Simple, Lets get source code to Jenkins
+-------------------------------------------
+New item -- > GetCodefromGit -- > Free Style -- > Ok --> source code management --> GIT
+
+--> Repo URL(take sample project repo) https://github.com/MadhanChaithanya/website.git
+
+--> Branch : master , keep default or change    
+
+Run the Build
+
+Now see the data Click on GetCodefromGit job --> WorkSpace
+
+Where is the code now in Jenkin server?
+
+cd /var/lib/Jenkins/workspace/
+
+cd GetCodefromGit
+
+
+
+Example 2:
+----------
+New item -- > Name -- > Free Style -- > Ok --> source code management
+
+--> Repo URL(take sample maven project repo) https://github.com/MadhanChaithanya/java-project-maven-new.git
+
+or take sample maven project https://github.com/jenkins-docs/simple-java-maven-app.git
+
+--> Branch : master , keep default or change    
+
+Build step --> Select Execute shell --> mvn clean package (sample) --> save --> build now
+
+If fails: In general, GitHub uses main branch instead master --> in job replace /master with /main
+
+GO to Jenkins Linux machine
+
+--> cd /var/lib/Jenkins/workspace/Firstjob/target/
+
+ls --> war file will be here
